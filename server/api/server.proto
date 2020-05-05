@@ -1,0 +1,91 @@
+syntax = "proto3";
+package server;
+option go_package = ".;server";
+
+service DownloadProvider {
+  rpc AddTask (AddTaskIn) returns (AddTaskOut) {}
+  rpc SelectDownLoadPath(SelectDownLoadPathIn)returns(SelectDownLoadPathOut){}
+  rpc GetDownloading (GetDownloadingIn) returns (GetDownloadingOut) {}
+  rpc GetDownloadFinish (GetDownloadFinishIn) returns (GetDownloadFinishOut) {}
+  rpc GetTrash (GetTrashIn) returns (GetTrashOut) {}
+  rpc NotifySteam(NotifyStreamIn)returns(stream NotifyStreamOut){}
+}
+message Download {
+	// gorm.Model
+	string URL  =1;//`gorm:"not null;unique;index:DownloadUrlBase64"` //base64
+  string	FilePath =2;         
+	string FileName  =3;
+	int64 DownloadSize    =4;  
+	double Progress     =5;     
+	int64 FileSize      =6;    
+  string	ErrorReason   =7;    
+	int32 FileRemoved       =8; //默认0 忽略 -1 否定 1 确定
+	int32 DownloadError     =9;
+	int32 Downloading       =10;
+	int32 Suspend           =11;
+	int32 DownloadFinish    =12;
+	int32 Trash             =13;
+	int32 OpsDelJob         =14;
+	int32 OpsDelJobComplete =15;
+}
+//addTask start 
+
+message AddTaskIn{
+  string Link =1;
+}
+message AddTaskOut {
+  string ErrorMsg = 1;
+}
+//addTask end
+
+//SelectDownLoadPath start
+message SelectDownLoadPathIn{
+}
+message SelectDownLoadPathOut {
+  string ErrorMsg = 1;
+  string PathDir = 2;
+}
+//SelectDownLoadPath end
+
+
+//GetDownloading start 
+
+message GetDownloadingIn{
+}
+message GetDownloadingOut {
+  string ErrorMsg = 1;
+  repeated Download Download = 2;
+}
+//GetDownloading end
+
+
+//GetDownloadFinish start 
+
+message GetDownloadFinishIn{
+}
+message GetDownloadFinishOut {
+  string ErrorMsg = 1;
+  repeated Download Download = 2;
+}
+//GetDownloadFinish end
+
+//GetDownloadFinish start 
+
+message GetTrashIn{
+}
+message GetTrashOut {
+  string ErrorMsg = 1;
+  repeated Download Download = 2;
+}
+//GetDownloadFinish end
+
+
+// NotifySteam start 
+message NotifyStreamIn{
+}
+message NotifyStreamOut {
+  string ErrorMsg = 1;
+  repeated Download Download = 2;
+  string title =3;
+}
+// NotifySteam end
