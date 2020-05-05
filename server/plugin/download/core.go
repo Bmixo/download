@@ -47,12 +47,12 @@ func (self *DownloadProvider) downloadProviderMain() {
 						Download{DownloadSize: self.DownloadMap[url64].BytesComplete(),
 							Downloading: 1,
 							FilePath:    self.DownloadPath,
-							FileSize:    self.DownloadMap[url64].Size(),
+							FileSize:    self.DownloadMap[url64].Size,
 							Progress:    self.DownloadMap[url64].Progress()})
 					self.notify("正在下载")
 					fmt.Printf("  transferred %v / %v  bytes (%.2f%%)\n",
 						self.DownloadMap[url64].BytesComplete(),
-						self.DownloadMap[url64].Size(),
+						self.DownloadMap[url64].Size,
 						100*self.DownloadMap[url64].Progress())
 				case <-self.DownloadMap[url64].Done:
 					break Loop
@@ -70,8 +70,8 @@ func (self *DownloadProvider) downloadProviderMain() {
 				fmt.Fprintf(os.Stderr, "Download failed: %v\n", err)
 			} else {
 				self.updateDownload(Download{URL: url64},
-					Download{DownloadSize: self.DownloadMap[url64].Size(),
-						FileSize:       self.DownloadMap[url64].Size(),
+					Download{DownloadSize: self.DownloadMap[url64].Size,
+						FileSize:       self.DownloadMap[url64].Size,
 						Progress:       1.00,
 						Downloading:    -1,
 						DownloadFinish: 1,
