@@ -3,7 +3,6 @@ module Trace/go
 go 1.14
 
 require (
-	github.com/Bmixo/download v0.0.0-20200505082825-bdd305d95140
 	github.com/cavaliercoder/grab v2.0.0+incompatible
 	github.com/go-flutter-desktop/go-flutter v0.40.1
 	github.com/go-flutter-desktop/plugins/package_info v0.0.0-20200402153039-a95ac83f3261
