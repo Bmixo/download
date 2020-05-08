@@ -27,6 +27,8 @@ class Download extends $pb.GeneratedMessage {
     ..a<$core.int>(13, 'Trash', $pb.PbFieldType.O3, protoName: 'Trash')
     ..a<$core.int>(14, 'OpsDelJob', $pb.PbFieldType.O3, protoName: 'OpsDelJob')
     ..a<$core.int>(15, 'OpsDelJobComplete', $pb.PbFieldType.O3, protoName: 'OpsDelJobComplete')
+    ..a<$core.double>(16, 'DownloadBytesPerSecond', $pb.PbFieldType.OD, protoName: 'DownloadBytesPerSecond')
+    ..a<$core.double>(17, 'UploadBytesPerSecond', $pb.PbFieldType.OD, protoName: 'UploadBytesPerSecond')
     ..hasRequiredFields = false
   ;
 
@@ -179,6 +181,24 @@ class Download extends $pb.GeneratedMessage {
   $core.bool hasOpsDelJobComplete() => $_has(14);
   @$pb.TagNumber(15)
   void clearOpsDelJobComplete() => clearField(15);
+
+  @$pb.TagNumber(16)
+  $core.double get downloadBytesPerSecond => $_getN(15);
+  @$pb.TagNumber(16)
+  set downloadBytesPerSecond($core.double v) { $_setDouble(15, v); }
+  @$pb.TagNumber(16)
+  $core.bool hasDownloadBytesPerSecond() => $_has(15);
+  @$pb.TagNumber(16)
+  void clearDownloadBytesPerSecond() => clearField(16);
+
+  @$pb.TagNumber(17)
+  $core.double get uploadBytesPerSecond => $_getN(16);
+  @$pb.TagNumber(17)
+  set uploadBytesPerSecond($core.double v) { $_setDouble(16, v); }
+  @$pb.TagNumber(17)
+  $core.bool hasUploadBytesPerSecond() => $_has(16);
+  @$pb.TagNumber(17)
+  void clearUploadBytesPerSecond() => clearField(17);
 }
 
 class AddTaskIn extends $pb.GeneratedMessage {
@@ -498,7 +518,9 @@ class NotifyStreamOut extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo('NotifyStreamOut', package: const $pb.PackageName('server'), createEmptyInstance: create)
     ..aOS(1, 'ErrorMsg', protoName: 'ErrorMsg')
     ..pc<Download>(2, 'Download', $pb.PbFieldType.PM, protoName: 'Download', subBuilder: Download.create)
-    ..aOS(3, 'title')
+    ..aOS(3, 'Title', protoName: 'Title')
+    ..a<$core.double>(4, 'DownloadBytesPerSecond', $pb.PbFieldType.OD, protoName: 'DownloadBytesPerSecond')
+    ..a<$core.double>(5, 'UploadBytesPerSecond', $pb.PbFieldType.OD, protoName: 'UploadBytesPerSecond')
     ..hasRequiredFields = false
   ;
 
@@ -537,5 +559,85 @@ class NotifyStreamOut extends $pb.GeneratedMessage {
   $core.bool hasTitle() => $_has(2);
   @$pb.TagNumber(3)
   void clearTitle() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.double get downloadBytesPerSecond => $_getN(3);
+  @$pb.TagNumber(4)
+  set downloadBytesPerSecond($core.double v) { $_setDouble(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasDownloadBytesPerSecond() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearDownloadBytesPerSecond() => clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.double get uploadBytesPerSecond => $_getN(4);
+  @$pb.TagNumber(5)
+  set uploadBytesPerSecond($core.double v) { $_setDouble(4, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasUploadBytesPerSecond() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearUploadBytesPerSecond() => clearField(5);
+}
+
+class GetPathInfoIn extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('GetPathInfoIn', package: const $pb.PackageName('server'), createEmptyInstance: create)
+    ..hasRequiredFields = false
+  ;
+
+  GetPathInfoIn._() : super();
+  factory GetPathInfoIn() => create();
+  factory GetPathInfoIn.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetPathInfoIn.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  GetPathInfoIn clone() => GetPathInfoIn()..mergeFromMessage(this);
+  GetPathInfoIn copyWith(void Function(GetPathInfoIn) updates) => super.copyWith((message) => updates(message as GetPathInfoIn));
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static GetPathInfoIn create() => GetPathInfoIn._();
+  GetPathInfoIn createEmptyInstance() => create();
+  static $pb.PbList<GetPathInfoIn> createRepeated() => $pb.PbList<GetPathInfoIn>();
+  @$core.pragma('dart2js:noInline')
+  static GetPathInfoIn getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetPathInfoIn>(create);
+  static GetPathInfoIn _defaultInstance;
+}
+
+class GetPathInfoOut extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('GetPathInfoOut', package: const $pb.PackageName('server'), createEmptyInstance: create)
+    ..aOS(1, 'ErrorMsg', protoName: 'ErrorMsg')
+    ..aOS(2, 'DownloadPath', protoName: 'DownloadPath')
+    ..hasRequiredFields = false
+  ;
+
+  GetPathInfoOut._() : super();
+  factory GetPathInfoOut() => create();
+  factory GetPathInfoOut.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetPathInfoOut.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  GetPathInfoOut clone() => GetPathInfoOut()..mergeFromMessage(this);
+  GetPathInfoOut copyWith(void Function(GetPathInfoOut) updates) => super.copyWith((message) => updates(message as GetPathInfoOut));
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static GetPathInfoOut create() => GetPathInfoOut._();
+  GetPathInfoOut createEmptyInstance() => create();
+  static $pb.PbList<GetPathInfoOut> createRepeated() => $pb.PbList<GetPathInfoOut>();
+  @$core.pragma('dart2js:noInline')
+  static GetPathInfoOut getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetPathInfoOut>(create);
+  static GetPathInfoOut _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get errorMsg => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set errorMsg($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasErrorMsg() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearErrorMsg() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get downloadPath => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set downloadPath($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasDownloadPath() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearDownloadPath() => clearField(2);
 }
 

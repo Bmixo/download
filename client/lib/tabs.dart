@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/material.dart';
 
-import 'portfolio/portfolio_tabs.dart';
 import 'main.dart';
 import 'itemTrash.dart';
 import 'itemDownloading.dart';
@@ -90,7 +89,7 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
           return new TransactionSheet(
             () {
               setState(() {
-                _makePortfolioDisplay();
+                // _makePortfolioDisplay();
               });
             },
             marketListData,
@@ -102,57 +101,6 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
             sheetOpen = false;
           });
         });
-  }
-
-  _makePortfolioDisplay() {
-    print("making portfolio display");
-    Map portfolioTotals = {};
-    List neededPriceSymbols = [];
-
-    portfolioMap.forEach((coin, transactions) {
-      num quantityTotal = 0;
-      transactions.forEach((value) {
-        quantityTotal += value["quantity"];
-      });
-      portfolioTotals[coin] = quantityTotal;
-      neededPriceSymbols.add(coin);
-    });
-
-    portfolioDisplay = [];
-    num totalPortfolioValue = 0;
-    marketListData.forEach((coin) {
-      if (neededPriceSymbols.contains(coin["symbol"]) &&
-          portfolioTotals[coin["symbol"]] != 0) {
-        portfolioDisplay.add({
-          "symbol": coin["symbol"],
-          "price_usd": coin["quotes"]["USD"]["price"],
-          "percent_change_24h": coin["quotes"]["USD"]["percent_change_24h"],
-          "percent_change_7d": coin["quotes"]["USD"]["percent_change_7d"],
-          "total_quantity": portfolioTotals[coin["symbol"]],
-          "id": coin["id"],
-          "name": coin["name"],
-        });
-        totalPortfolioValue +=
-            (portfolioTotals[coin["symbol"]] * coin["quotes"]["USD"]["price"]);
-      }
-    });
-
-    num total24hChange = 0;
-    num total7dChange = 0;
-    portfolioDisplay.forEach((coin) {
-      total24hChange += (coin["percent_change_24h"] *
-          ((coin["price_usd"] * coin["total_quantity"]) / totalPortfolioValue));
-      total7dChange += (coin["percent_change_7d"] *
-          ((coin["price_usd"] * coin["total_quantity"]) / totalPortfolioValue));
-    });
-
-    totalPortfolioStats = {
-      "value_usd": totalPortfolioValue,
-      "percent_change_24h": total24hChange,
-      "percent_change_7d": total7dChange
-    };
-
-    _sortPortfolioDisplay();
   }
 
   @override
@@ -167,8 +115,6 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
         _handleTabChange();
       }
     });
-
-    _makePortfolioDisplay();
   }
 
   @override
@@ -185,6 +131,53 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+        bottomNavigationBar: new Container(
+          height: 30,
+          decoration: new BoxDecoration(
+              border: new Border(
+            top: new BorderSide(color: Theme.of(context).bottomAppBarColor),
+          )),
+          child: new Row(
+            children: <Widget>[
+              new SizedBox(
+                width: 8,
+              ),
+              new Text("下载", style: Theme.of(context).textTheme.caption),
+              new SizedBox(
+                width: 10,
+              ),
+              ValueListenableBuilder(
+                builder: (BuildContext context, int value, Widget child) {
+                  return Text(
+                      calcSize(downloadData.downloadBytesPerSecond) + "MB/S",
+                      style: Theme.of(context).primaryTextTheme.body2.apply(
+                            color: Colors.green,
+                            fontSizeFactor: 0.9,
+                          ));
+                },
+                valueListenable: updateDownloadDetail,
+              ),
+              new SizedBox(
+                width: 10,
+              ),
+              new Text("上传", style: Theme.of(context).textTheme.caption),
+              new SizedBox(
+                width: 10,
+              ),
+              ValueListenableBuilder(
+                builder: (BuildContext context, int value, Widget child) {
+                  return Text(
+                      calcSize(downloadData.uploadBytesPerSecond) + "MB/S",
+                      style: Theme.of(context).primaryTextTheme.body2.apply(
+                            color: Colors.green,
+                            fontSizeFactor: 0.9,
+                          ));
+                },
+                valueListenable: updateDownloadDetail,
+              ),
+            ],
+          ),
+        ),
         key: _scaffoldKey,
         drawer: new Drawer(
             child: new Scaffold(
@@ -213,63 +206,6 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
                       leading: new Icon(Icons.settings),
                       title: new Text("Settings"),
                       onTap: () => Navigator.pushNamed(context, "/settings"),
-                    ),
-                    new ListTile(
-                      leading: new Icon(Icons.timeline),
-                      title: new Text("Portfolio Timeline"),
-                      onTap: () => Navigator.push(
-                          context,
-                          new MaterialPageRoute(
-                              builder: (context) =>
-                                  new PortfolioTabs(0, _makePortfolioDisplay))),
-                    ),
-                    new ListTile(
-                      leading: new Icon(Icons.pie_chart_outlined),
-                      title: new Text("Portfolio Breakdown"),
-                      onTap: () => Navigator.push(
-                          context,
-                          new MaterialPageRoute(
-                              builder: (context) =>
-                                  new PortfolioTabs(1, _makePortfolioDisplay))),
-                    ),
-                    new Container(
-                      decoration: new BoxDecoration(
-                          border: new Border(
-                              bottom: new BorderSide(
-                                  color: Theme.of(context).bottomAppBarColor,
-                                  width: 1.0))),
-                      padding: const EdgeInsets.symmetric(vertical: 4.0),
-                    ),
-                    new ListTile(
-                      leading: new Icon(Icons.short_text),
-                      title: new Text("Abbreviate Numbers"),
-                      trailing: new Switch(
-                          activeColor: Theme.of(context).accentColor,
-                          value: shortenOn,
-                          onChanged: (onOff) {
-                            setState(() {
-                              shortenOn = onOff;
-                            });
-                            widget.savePreferences();
-                          }),
-                      onTap: () {
-                        setState(() {
-                          shortenOn = !shortenOn;
-                        });
-                        widget.savePreferences();
-                      },
-                    ),
-                    new ListTile(
-                      leading: new Icon(Icons.opacity),
-                      title: new Text("OLED Dark Mode"),
-                      trailing: new Switch(
-                        activeColor: Theme.of(context).accentColor,
-                        value: widget.darkOLED,
-                        onChanged: (onOff) {
-                          widget.switchOLED(state: onOff);
-                        },
-                      ),
-                      onTap: widget.switchOLED,
                     ),
                   ],
                 ))),
@@ -418,69 +354,6 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
             new SliverList(
                 delegate: new SliverChildListDelegate(<Widget>[
               new Container(
-                padding: const EdgeInsets.only(
-                    left: 10.0, right: 10.0, top: 10.0, bottom: 4.0),
-                child: new Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    new Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        new Text("总速度",
-                            style: Theme.of(context).textTheme.caption),
-                        new Text(
-                            numCommaParse(totalPortfolioStats["value_usd"]
-                                    .toStringAsFixed(2)) +
-                                " MB/S",
-                            style: Theme.of(context)
-                                .textTheme
-                                .body2
-                                .apply(fontSizeFactor: 2.2)),
-                      ],
-                    ),
-                    new Column(
-                      children: <Widget>[
-                        new Text("上传速度",
-                            style: Theme.of(context).textTheme.caption),
-                        new Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 1.0)),
-                        new Text("1.00 MB/S",
-                            style:
-                                Theme.of(context).primaryTextTheme.body2.apply(
-                                      color: totalPortfolioStats[
-                                                  "percent_change_7d"] >=
-                                              0
-                                          ? Colors.green
-                                          : Colors.red,
-                                      fontSizeFactor: 1.4,
-                                    ))
-                      ],
-                    ),
-                    new Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: <Widget>[
-                        new Text("下载速度",
-                            style: Theme.of(context).textTheme.caption),
-                        new Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 1.0)),
-                        new Text("1.00 MB/S",
-                            style: Theme.of(context)
-                                .primaryTextTheme
-                                .body2
-                                .apply(
-                                    color: totalPortfolioStats[
-                                                "percent_change_24h"] >=
-                                            0
-                                        ? Colors.green
-                                        : Colors.red,
-                                    fontSizeFactor: 1.4))
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              new Container(
                 margin: const EdgeInsets.only(left: 6.0, right: 6.0),
                 decoration: new BoxDecoration(
                     border: new Border(
@@ -582,7 +455,6 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
                 ),
               ),
             ])),
-            // downloadListData["正在下载"].length != 0
             ValueListenableBuilder(
               builder: (BuildContext context, int value, Widget child) {
                 return downloadListData["正在下载"].length != 0

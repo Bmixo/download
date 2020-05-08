@@ -1,6 +1,7 @@
 import 'package:Trace/api/v1/server.pbgrpc.dart';
 import 'package:flutter/material.dart';
 import 'package:Trace/api.dart';
+
 class TransactionSheet extends StatefulWidget {
   TransactionSheet(
     this.loadPortfolio,
@@ -33,12 +34,12 @@ class TransactionSheetState extends State<TransactionSheet> {
   Color downloadLinkTextColor;
 
   Map totalQuantities;
-
+  String downloadPath;
   @override
   void initState() {
     super.initState();
     downloadLinkTextColor = okColor;
-
+    setPath();
   }
 
   @override
@@ -61,8 +62,7 @@ class TransactionSheetState extends State<TransactionSheet> {
                   children: <Widget>[
                     new Container(
                         padding: const EdgeInsets.symmetric(vertical: 4.0),
-                        child: new Text(
-                                "添加任务",
+                        child: new Text("添加任务",
                             style: Theme.of(context).textTheme.body2.apply(
                                 fontSizeFactor: 1.2, fontWeightDelta: 2))),
                     new Row(
@@ -96,24 +96,40 @@ class TransactionSheetState extends State<TransactionSheet> {
                       ],
                     ),
                     new Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
+                        new Container(
+                          width: MediaQuery.of(context).size.width * 0.65,
+                          padding: const EdgeInsets.only(right: 4.0),
+                          child: new TextField(
+                            enabled: false,
+                            style: Theme.of(context)
+                                .textTheme
+                                .body2
+                                .apply(color: downloadLinkTextColor),
+                            decoration: new InputDecoration(
+                              border: InputBorder.none,
+                              hintText: downloadPath,
+                            ),
+                          ),
+                        ),
                         Container(
-                          width: 35,
-                          height: 35,
-                          margin: EdgeInsets.only(
-                              left: 10, top: 10, right: 10, bottom: 2),
+                          width: 28,
+                          height: 28,
+                          // margin: EdgeInsets.only(
+                          //     left: 10, top: 10, right: 10, bottom: 0),
                           child: FlatButton(
-                              onPressed: () => _selectPath(this.context),
-                              // color: Color.fromARGB(0, 0, 0, 0),
-                              shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(5)),
-                              ),
-                              // textColor: Color.fromARGB(255, 0, 0, 0),
-                              padding: EdgeInsets.all(-10),
-                              child: Image.asset(
-                                "assets/images/floder.png",
-                              )),
+                            onPressed: () => _selectPath(this.context),
+                            // color: Color.fromARGB(0, 0, 0, 0),
+                            shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(5)),
+                            ),
+                            textColor: Colors.grey,
+                            padding: EdgeInsets.all(-10),
+                            child: Icon(Icons.folder),
+                          ),
                         ),
                       ],
                     ),
@@ -190,6 +206,15 @@ class TransactionSheetState extends State<TransactionSheet> {
       },
     );
   }
+
+  void setPath() async {
+    var infox = await getPathInfo();
+    downloadPath = infox.downloadPath;
+    setState(() {
+      
+    });
+  }
+
   void _selectPath(BuildContext context) async {
     showDialog(
         context: context,
@@ -200,12 +225,12 @@ class TransactionSheetState extends State<TransactionSheet> {
             borderRadius: BorderRadius.circular(4.0),
           ));
         });
-    SelectDownLoadPathOut info =await selectDownLoadPath();
+    SelectDownLoadPathOut info = await selectDownLoadPath();
     if (info.errorMsg != "") {
       Navigator.pop(context);
       ShowWarringDialog(context, info.errorMsg);
     }
-    setState(() {});
+    setPath();
   }
 
   void _download(BuildContext context) async {

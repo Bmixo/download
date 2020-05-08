@@ -9,6 +9,7 @@ service DownloadProvider {
   rpc GetDownloadFinish (GetDownloadFinishIn) returns (GetDownloadFinishOut) {}
   rpc GetTrash (GetTrashIn) returns (GetTrashOut) {}
   rpc NotifySteam(NotifyStreamIn)returns(stream NotifyStreamOut){}
+  rpc GetPathInfo(GetPathInfoIn)returns(GetPathInfoOut){}
 }
 message Download {
 	// gorm.Model
@@ -26,7 +27,9 @@ message Download {
 	int32 DownloadFinish    =12;
 	int32 Trash             =13;
 	int32 OpsDelJob         =14;
-	int32 OpsDelJobComplete =15;
+  int32 OpsDelJobComplete =15;
+  double DownloadBytesPerSecond =16;
+  double UploadBytesPerSecond = 17;
 }
 //addTask start 
 
@@ -86,6 +89,19 @@ message NotifyStreamIn{
 message NotifyStreamOut {
   string ErrorMsg = 1;
   repeated Download Download = 2;
-  string title =3;
+  string Title =3;
+  double DownloadBytesPerSecond =4;
+  double UploadBytesPerSecond = 5;
 }
 // NotifySteam end
+
+
+//GetPathInfo start 
+
+message GetPathInfoIn{
+}
+message GetPathInfoOut{
+  string ErrorMsg = 1;
+  string DownloadPath =2;
+}
+//GetPathInfo end 

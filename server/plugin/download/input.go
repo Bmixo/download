@@ -3,10 +3,11 @@ package download
 import (
 	"context"
 	"fmt"
+	"path/filepath"
 	"strings"
 
 	pb "github.com/Bmixo/download/server/api/v1"
-	"github.com/cavaliercoder/grab"
+	"github.com/Bmixo/download/server/plugin/download/grab"
 	"github.com/ncruces/zenity"
 )
 
@@ -25,7 +26,7 @@ func (self *API) AddTask(ctx context.Context, in *pb.AddTaskIn) (*pb.AddTaskOut,
 	if num != 0 {
 		return &pb.AddTaskOut{ErrorMsg: "下载链接不支持"}, nil
 	}
-	req, err := grab.NewRequest(self.downloadProvider.DownloadPath, in.Link)
+	req, err := grab.NewRequest(self.downloadProvider.config.DownloadPath, in.Link)
 	if err != nil {
 		return &pb.AddTaskOut{ErrorMsg: "内部错误"}, nil
 	}
@@ -42,8 +43,17 @@ func (self *API) SelectDownLoadPath(ctx context.Context, in *pb.SelectDownLoadPa
 	if err != nil || path == "" {
 		return &pb.SelectDownLoadPathOut{PathDir: "", ErrorMsg: "路径选择失败"}, nil
 	}
-	self.downloadProvider.DownloadPath = path
-	return &pb.SelectDownLoadPathOut{PathDir: path, ErrorMsg: "路径修改成功"}, nil
+	absPath, err := filepath.Abs(path)
+	if err != nil {
+		return &pb.SelectDownLoadPathOut{PathDir: "", ErrorMsg: "路径选择失败"}, nil
+	}
+	err = self.downloadProvider.config.UpdateConfig(self.downloadProvider.db,
+		DownloadConfig{Name: "default"}, DownloadConfig{Name: "default", DownloadPath: absPath})
+	if err != nil {
+		return &pb.SelectDownLoadPathOut{PathDir: "", ErrorMsg: "路径修改失败"}, nil
+	}
+	self.downloadProvider.config.DownloadPath = absPath
+	return &pb.SelectDownLoadPathOut{PathDir: absPath, ErrorMsg: "路径修改成功"}, nil
 }
 func (self *API) GetDownloading(ctx context.Context, in *pb.GetDownloadingIn) (*pb.GetDownloadingOut, error) {
 	var downloads []*pb.Download
@@ -73,6 +83,10 @@ func (self *API) NotifySteam(in *pb.NotifyStreamIn, stream pb.DownloadProvider_N
 	}
 	fmt.Println("connect exit...")
 	return nil
+}
+
+func (self *API) GetPathInfo(ctx context.Context, in *pb.GetPathInfoIn) (*pb.GetPathInfoOut, error) {
+	return &pb.GetPathInfoOut{DownloadPath: self.downloadProvider.config.DownloadPath, ErrorMsg: ""}, nil
 }
 
 // func (self *API) ChangeDownloadStatus(ctx context.Context, in *pb.AddTaskIn) (*pb.AddTaskOut, error) {

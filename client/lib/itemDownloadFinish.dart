@@ -69,7 +69,7 @@ class CFFCFCF extends State<ListItemDownFinish> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Text(calcSize(jsonData.fileSize)),
+                      Text(calcSize(int642double(jsonData.fileSize))),
                       Text(status),
                     ],
                   ),

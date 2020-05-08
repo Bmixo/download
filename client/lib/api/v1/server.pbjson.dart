@@ -23,6 +23,8 @@ const Download$json = const {
     const {'1': 'Trash', '3': 13, '4': 1, '5': 5, '10': 'Trash'},
     const {'1': 'OpsDelJob', '3': 14, '4': 1, '5': 5, '10': 'OpsDelJob'},
     const {'1': 'OpsDelJobComplete', '3': 15, '4': 1, '5': 5, '10': 'OpsDelJobComplete'},
+    const {'1': 'DownloadBytesPerSecond', '3': 16, '4': 1, '5': 1, '10': 'DownloadBytesPerSecond'},
+    const {'1': 'UploadBytesPerSecond', '3': 17, '4': 1, '5': 1, '10': 'UploadBytesPerSecond'},
   ],
 };
 
@@ -97,7 +99,21 @@ const NotifyStreamOut$json = const {
   '2': const [
     const {'1': 'ErrorMsg', '3': 1, '4': 1, '5': 9, '10': 'ErrorMsg'},
     const {'1': 'Download', '3': 2, '4': 3, '5': 11, '6': '.server.Download', '10': 'Download'},
-    const {'1': 'title', '3': 3, '4': 1, '5': 9, '10': 'title'},
+    const {'1': 'Title', '3': 3, '4': 1, '5': 9, '10': 'Title'},
+    const {'1': 'DownloadBytesPerSecond', '3': 4, '4': 1, '5': 1, '10': 'DownloadBytesPerSecond'},
+    const {'1': 'UploadBytesPerSecond', '3': 5, '4': 1, '5': 1, '10': 'UploadBytesPerSecond'},
+  ],
+};
+
+const GetPathInfoIn$json = const {
+  '1': 'GetPathInfoIn',
+};
+
+const GetPathInfoOut$json = const {
+  '1': 'GetPathInfoOut',
+  '2': const [
+    const {'1': 'ErrorMsg', '3': 1, '4': 1, '5': 9, '10': 'ErrorMsg'},
+    const {'1': 'DownloadPath', '3': 2, '4': 1, '5': 9, '10': 'DownloadPath'},
   ],
 };
 

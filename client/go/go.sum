@@ -1,4 +1,6 @@
 cloud.google.com/go v0.26.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMTw=
+github.com/Bmixo/download v0.0.0-20200505091415-1e38c36d7470 h1:bqbL3bU0II7bfL7p9/tnJcRjP1uSQyAYWJivx7QC6fk=
+github.com/Bmixo/download v0.0.0-20200505091415-1e38c36d7470/go.mod h1:DTC2khJU2wgCLCKn0B5DQR6dm/bcjzinFJGAwO/amxM=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/Xuanwo/go-locale v0.2.0 h1:1N8SGG2VNpLl6VVa8ueZm3Nm+dxvk8ffY9aviKHl4IE=
 github.com/Xuanwo/go-locale v0.2.0/go.mod h1:6qbT9M726OJgyiGZro2YwPmx63wQzlH+VvtjJWQoftw=

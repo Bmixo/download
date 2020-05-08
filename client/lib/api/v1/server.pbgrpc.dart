@@ -46,6 +46,11 @@ class DownloadProviderClient extends $grpc.Client {
           ($0.NotifyStreamIn value) => value.writeToBuffer(),
           ($core.List<$core.int> value) =>
               $0.NotifyStreamOut.fromBuffer(value));
+  static final _$getPathInfo =
+      $grpc.ClientMethod<$0.GetPathInfoIn, $0.GetPathInfoOut>(
+          '/server.DownloadProvider/GetPathInfo',
+          ($0.GetPathInfoIn value) => value.writeToBuffer(),
+          ($core.List<$core.int> value) => $0.GetPathInfoOut.fromBuffer(value));
 
   DownloadProviderClient($grpc.ClientChannel channel,
       {$grpc.CallOptions options})
@@ -100,6 +105,14 @@ class DownloadProviderClient extends $grpc.Client {
         options: options);
     return $grpc.ResponseStream(call);
   }
+
+  $grpc.ResponseFuture<$0.GetPathInfoOut> getPathInfo($0.GetPathInfoIn request,
+      {$grpc.CallOptions options}) {
+    final call = $createCall(
+        _$getPathInfo, $async.Stream.fromIterable([request]),
+        options: options);
+    return $grpc.ResponseFuture(call);
+  }
 }
 
 abstract class DownloadProviderServiceBase extends $grpc.Service {
@@ -152,6 +165,13 @@ abstract class DownloadProviderServiceBase extends $grpc.Service {
         true,
         ($core.List<$core.int> value) => $0.NotifyStreamIn.fromBuffer(value),
         ($0.NotifyStreamOut value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.GetPathInfoIn, $0.GetPathInfoOut>(
+        'GetPathInfo',
+        getPathInfo_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.GetPathInfoIn.fromBuffer(value),
+        ($0.GetPathInfoOut value) => value.writeToBuffer()));
   }
 
   $async.Future<$0.AddTaskOut> addTask_Pre(
@@ -186,6 +206,11 @@ abstract class DownloadProviderServiceBase extends $grpc.Service {
     yield* notifySteam(call, await request);
   }
 
+  $async.Future<$0.GetPathInfoOut> getPathInfo_Pre(
+      $grpc.ServiceCall call, $async.Future<$0.GetPathInfoIn> request) async {
+    return getPathInfo(call, await request);
+  }
+
   $async.Future<$0.AddTaskOut> addTask(
       $grpc.ServiceCall call, $0.AddTaskIn request);
   $async.Future<$0.SelectDownLoadPathOut> selectDownLoadPath(
@@ -198,4 +223,6 @@ abstract class DownloadProviderServiceBase extends $grpc.Service {
       $grpc.ServiceCall call, $0.GetTrashIn request);
   $async.Stream<$0.NotifyStreamOut> notifySteam(
       $grpc.ServiceCall call, $0.NotifyStreamIn request);
+  $async.Future<$0.GetPathInfoOut> getPathInfo(
+      $grpc.ServiceCall call, $0.GetPathInfoIn request);
 }

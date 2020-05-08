@@ -22,6 +22,7 @@ Map<String, List<Download>> downloadListData = {
   "下载完成": [],
   "垃圾箱": []
 };
+var downloadData = NotifyStreamOut();
 
 const double appBarHeight = 48.0;
 const double appBarElevation = 1.0;
@@ -29,7 +30,7 @@ const double appBarElevation = 1.0;
 bool shortenOn = false;
 
 List marketListData;
-Map portfolioMap;
+Map portfolioMap={};
 List portfolioDisplay;
 Map totalPortfolioStats;
 
@@ -42,28 +43,6 @@ int lastUpdate;
 final ValueNotifier<int> updateDownloadDetail = ValueNotifier<int>(0);
 
 void main() async {
-  await getApplicationDocumentsDirectory().then((Directory directory) async {
-    File jsonFile = new File(directory.path + "/portfolio.json");
-    if (jsonFile.existsSync()) {
-      portfolioMap = json.decode(jsonFile.readAsStringSync());
-    } else {
-      jsonFile.createSync();
-      jsonFile.writeAsStringSync("{}");
-      portfolioMap = {};
-    }
-    if (portfolioMap == null) {
-      portfolioMap = {};
-    }
-    jsonFile = new File(directory.path + "/marketData.json");
-    if (jsonFile.existsSync()) {
-      marketListData = json.decode(jsonFile.readAsStringSync());
-    } else {
-      jsonFile.createSync();
-      jsonFile.writeAsStringSync("[]");
-      marketListData = [];
-    }
-  });
-
   String themeMode = "Automatic";
   bool darkOLED = false;
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -76,60 +55,6 @@ void main() async {
   notifySteam();
   runApp(new TraceApp(themeMode, darkOLED));
 }
-
-numCommaParse(numString) {
-  if (shortenOn) {
-    String str = num.parse(numString ?? "0")
-        .round()
-        .toString()
-        .replaceAllMapped(new RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-            (Match m) => "${m[1]},");
-    List<String> strList = str.split(",");
-
-    if (strList.length > 3) {
-      return strList[0] +
-          "." +
-          strList[1].substring(0, 4 - strList[0].length) +
-          "B";
-    } else if (strList.length > 2) {
-      return strList[0] +
-          "." +
-          strList[1].substring(0, 4 - strList[0].length) +
-          "M";
-    } else {
-      return num.parse(numString ?? "0").toString().replaceAllMapped(
-          new RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => "${m[1]},");
-    }
-  }
-
-  return num.parse(numString ?? "0").toString().replaceAllMapped(
-      new RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => "${m[1]},");
-}
-
-normalizeNum(num input) {
-  if (input == null) {
-    input = 0;
-  }
-  if (input >= 100000) {
-    return numCommaParse(input.round().toString());
-  } else if (input >= 1000) {
-    return numCommaParse(input.toStringAsFixed(2));
-  } else {
-    return input.toStringAsFixed(6 - input.round().toString().length);
-  }
-}
-
-normalizeNumNoCommas(num input) {
-  if (input == null) {
-    input = 0;
-  }
-  if (input >= 1000) {
-    return input.toStringAsFixed(2);
-  } else {
-    return input.toStringAsFixed(6 - input.round().toString().length);
-  }
-}
-
 class TraceApp extends StatefulWidget {
   TraceApp(this.themeMode, this.darkOLED);
   final themeMode;

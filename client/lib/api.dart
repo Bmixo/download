@@ -1,5 +1,3 @@
-import 'package:flutter/cupertino.dart';
-
 import 'main.dart';
 import 'api/v1/server.pb.dart';
 //import 'package:grpc/grpc.dart';
@@ -11,6 +9,10 @@ Future<AddTaskOut> addTask(String link) async {
 
 Future<GetDownloadingOut> getDownloading() async {
   return await stub.getDownloading(GetDownloadingIn());
+}
+
+Future<GetPathInfoOut> getPathInfo() async {
+  return await stub.getPathInfo(GetPathInfoIn());
 }
 
 Future<GetDownloadFinishOut> getDownloadFinish() async {
@@ -50,10 +52,11 @@ notifySteam() async {
             print("Call: " + note.title);
             break;
         }
+        downloadData.downloadBytesPerSecond = note.downloadBytesPerSecond;
+        downloadData.uploadBytesPerSecond = note.uploadBytesPerSecond;
         updateDownloadDetail.notifyListeners();
       }
     } catch (e) {
-      //print(e);
     }
   }
 }
@@ -71,9 +74,12 @@ void updateStatus(String type) async {
       break;
   }
 }
-
-String calcSize(fixnum.Int64 byteSizeInt) {
-  double byteSize = byteSizeInt.toDouble();
+//fixnum.Int64 
+double int642double(fixnum.Int64 intnum){
+  return intnum.toDouble();
+}
+String calcSize(double byteSize) {
+  // double byteSize = byteSizeInt.toDouble();
   double power = 1024;
   double n = 0;
   Map<int, String> powerN = {0: '', 1: 'KB', 2: 'MB', 3: 'GB', 4: 'TB'};

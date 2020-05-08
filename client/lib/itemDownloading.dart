@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'main.dart';
 import 'package:Trace/api.dart';
+import 'package:fixnum/fixnum.dart' as fixnum;
 class ListItemDownloading extends StatefulWidget {
   @override
   State createState() => CFFCFCF();
@@ -76,9 +77,9 @@ class CFFCFCF extends State<ListItemDownloading> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text(calcSize(jsonData.downloadSize) +
+                    Text(calcSize(int642double(jsonData.downloadSize)) +
                         "/" +
-                        calcSize(jsonData.fileSize)),
+                        calcSize(int642double(jsonData.fileSize))),
                     Text(status),
                   ],
                 ),
