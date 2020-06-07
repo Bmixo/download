@@ -1,6 +1,6 @@
 # download
 
-![image](https://github.com/Bmixo/download/docs/images/app.png)
+![image](https://raw.githubusercontent.com/Bmixo/download/master/docs/images/app.PNG)
 ### english
 this app total free
 
