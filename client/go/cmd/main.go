@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	// "github.com/Bmixo/download/server/cmd"
+	"github.com/Bmixo/download/server/cmd"
 
 	"github.com/go-flutter-desktop/go-flutter"
 	"github.com/pkg/errors"
@@ -18,7 +18,7 @@ import (
 var vmArguments string
 
 func main() {
-	// go cmd.Start()
+	go cmd.Start()
 
 	// DO NOT EDIT, add options in options.go
 	mainOptions := []flutter.Option{

@@ -7,7 +7,7 @@ import 'itemTrash.dart';
 import 'itemDownloading.dart';
 import 'itemDownloadFinish.dart';
 import 'portfolio/transaction_sheet.dart';
-import 'package:Trace/api.dart';
+import 'package:Download/api.dart';
 
 class Tabs extends StatefulWidget {
   Tabs(

@@ -1,5 +1,5 @@
-name: Trace
-description: Cryptocurrency portfolio and market explorer.
+name: Download
+description: download app.
 
 dependencies:
   flutter:
